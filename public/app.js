@@ -7,11 +7,13 @@ const $ = (sel, el = document) => el.querySelector(sel);
 
 const STORE_FILTERS = 'dl-timers.filters.v1';
 const STORE_HINT = 'dl-timers.hint-dismissed.v1';
+const STORE_AUDIO = 'dl-timers.audio.v1';
 
 /* ---------------- state ---------------- */
 
 const state = {
   filters: loadFilters(),
+  audio: loadAudio(),
   clock: { running: false, anchor: 0, offset: 0 }, // offset in seconds
   shifts: {}, // per shiftable row: { count, t } — click-projected respawns
   rejuvFrom: null, // set when Mid Boss is clicked: rejuvenator pickup time (minutes)
@@ -32,6 +34,243 @@ function loadFilters() {
 }
 function saveFilters() {
   localStorage.setItem(STORE_FILTERS, JSON.stringify(state.filters));
+}
+
+/* ---------------- audio cues ---------------- */
+
+function loadAudio() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_AUDIO));
+    if (s && typeof s === 'object') {
+      return {
+        muted: !!s.muted,
+        volume: typeof s.volume === 'number' ? Math.min(2, Math.max(0, s.volume)) : 1,
+        lanes: (s.lanes && typeof s.lanes === 'object') ? s.lanes : {},
+        custom: Array.isArray(s.custom) ? s.custom : [],
+      };
+    }
+  } catch (_) { /* fresh visit */ }
+  return { muted: false, volume: 1, lanes: {}, custom: [] };
+}
+function saveAudio() { localStorage.setItem(STORE_AUDIO, JSON.stringify(state.audio)); }
+
+/* a lane's cue flags — absent means all off */
+function laneCues(id) {
+  return state.audio.lanes[id] || { pre: false, count: false, start: false };
+}
+function cuesAnyOn(c) { return !!(c && (c.pre || c.count || c.start)); }
+
+/* -- Web Audio: synthesize tones so we ship no audio assets -- */
+let audioCtx = null;
+function audioUnlock() {
+  if (!audioCtx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    audioCtx = new AC();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function tone(freq, ms, { type = 'sine', peak = 0.18, glideTo = null, delay = 0 } = {}) {
+  const ctx = audioUnlock();
+  if (!ctx) return;
+  const vol = state.audio.volume == null ? 1 : state.audio.volume;
+  const level = peak * vol;
+  if (level < 0.0005) return; // silent — also avoids an exponential ramp to 0
+  const t0 = ctx.currentTime + delay;
+  const dur = ms / 1000;
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, t0);
+  if (glideTo) osc.frequency.exponentialRampToValueAtTime(glideTo, t0 + dur);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(level, t0 + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  osc.connect(g).connect(ctx.destination);
+  osc.start(t0);
+  osc.stop(t0 + dur + 0.03);
+}
+/* three distinct cues */
+function cuePre() { tone(430, 320, { type: 'sine', peak: 0.16, glideTo: 560 }); }   // rising "get ready"
+function cueBlip() { tone(620, 110, { type: 'triangle', peak: 0.15 }); }             // tick · tick · tick
+function cueStart() {                                                                // bright two-note ding
+  tone(880, 150, { type: 'sine', peak: 0.2 });
+  tone(1245, 300, { type: 'sine', peak: 0.2, delay: 0.11 });
+}
+const CUE_SOUND = { pre: cuePre, count: cueBlip, start: cueStart };
+
+/* -- event times per lane, straight from the data (independent of filters) -- */
+function laneEventTimes(row) {
+  const shift = row.shiftable ? state.shifts[row.id] : null;
+  if (shift && shift.count > 0 && shift.t != null) return [shift.t]; // follow the projection
+  const out = [];
+  if (row.marks) for (const m of row.marks) out.push(m.t);
+  if (row.gradient) for (const s of row.gradient.stops) out.push(s.t);
+  return out;
+}
+function audioEvents() {
+  const evs = [];
+  for (const row of ROWS) {
+    const c = state.audio.lanes[row.id];
+    if (!cuesAnyOn(c)) continue;
+    for (const t of laneEventTimes(row)) evs.push({ sec: t * 60, cues: c });
+  }
+  for (const node of state.audio.custom) {
+    if (!cuesAnyOn(node.cues)) continue;
+    evs.push({ sec: node.t * 60, cues: node.cues });
+  }
+  return evs;
+}
+
+/* -- firing tick: sound once as the running clock crosses each cue time.
+      Scrub/nudge jumps the clock, so only fire on small forward steps —
+      otherwise silently re-baseline so a seek never machine-guns the cues. -- */
+let lastAudioSec = null;
+function audioTick() {
+  const c = state.clock;
+  if (!c.running || state.audio.muted) { lastAudioSec = null; return; }
+  const now = clockSeconds();
+  if (lastAudioSec == null || now < lastAudioSec || now - lastAudioSec > 1.5) {
+    lastAudioSec = now;
+    return;
+  }
+  const lo = lastAudioSec;
+  const crossed = (target) => target > lo && target <= now;
+  for (const ev of audioEvents()) {
+    if (ev.cues.pre && crossed(ev.sec - 30)) cuePre();
+    if (ev.cues.count) for (let k = 5; k >= 1; k--) if (crossed(ev.sec - k)) cueBlip();
+    if (ev.cues.start && crossed(ev.sec)) cueStart();
+  }
+  lastAudioSec = now;
+}
+
+/* -- cue-config popover (shared by lanes and, later, custom nodes) -- */
+const CUE_META = [
+  ['pre', 'Pre-event ding', '−30s'],
+  ['count', 'Countdown beeps', '−5s'],
+  ['start', 'Start ding', 'on time'],
+];
+const audioPop = document.createElement('div');
+audioPop.className = 'audio-pop';
+document.body.appendChild(audioPop);
+let audioPopOpen = false;
+
+function onPopDismiss(e) {
+  if (e.type === 'keydown') { if (e.key === 'Escape') closeCuePopover(); return; }
+  if (!audioPop.contains(e.target)) closeCuePopover();
+}
+function closeCuePopover() {
+  if (!audioPopOpen) return;
+  audioPopOpen = false;
+  audioPop.classList.remove('show');
+  document.removeEventListener('pointerdown', onPopDismiss, true);
+  document.removeEventListener('keydown', onPopDismiss, true);
+}
+function openCuePopover(anchorRect, opts) {
+  // opts: { title, cues, onToggle(cue, on), footer? }
+  audioUnlock(); // prime audio on the gesture that opened this
+  audioPop.replaceChildren();
+
+  const head = document.createElement('div');
+  head.className = 'ap-head';
+  head.textContent = opts.title;
+  audioPop.appendChild(head);
+
+  for (const [cue, label, when] of CUE_META) {
+    const row = document.createElement('label');
+    row.className = 'ap-row';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = !!opts.cues[cue];
+    cb.addEventListener('change', () => {
+      opts.onToggle(cue, cb.checked);
+      if (cb.checked) CUE_SOUND[cue](); // preview the sound you just armed
+    });
+    const txt = document.createElement('span');
+    txt.textContent = label;
+    const em = document.createElement('em');
+    em.textContent = when;
+    row.append(cb, txt, em);
+    audioPop.appendChild(row);
+  }
+  if (opts.footer) audioPop.appendChild(opts.footer);
+
+  audioPop.classList.add('show');
+  const r = audioPop.getBoundingClientRect();
+  let left = anchorRect.left;
+  let top = anchorRect.bottom + 6;
+  if (left + r.width > innerWidth - 8) left = innerWidth - 8 - r.width;
+  if (top + r.height > innerHeight - 8) top = anchorRect.top - r.height - 6;
+  audioPop.style.left = `${Math.max(8, left)}px`;
+  audioPop.style.top = `${Math.max(8, top)}px`;
+
+  audioPopOpen = true;
+  // defer listener attach so the opening click doesn't immediately dismiss it
+  setTimeout(() => {
+    document.addEventListener('pointerdown', onPopDismiss, true);
+    document.addEventListener('keydown', onPopDismiss, true);
+  }, 0);
+}
+
+function openLanePopover(row, glyph, anchorRect) {
+  openCuePopover(anchorRect, {
+    title: row.name,
+    cues: laneCues(row.id),
+    onToggle: (cue, on) => {
+      const c = state.audio.lanes[row.id]
+        || (state.audio.lanes[row.id] = { pre: false, count: false, start: false });
+      c[cue] = on;
+      if (!cuesAnyOn(c)) delete state.audio.lanes[row.id];
+      saveAudio();
+      glyph.classList.toggle('on', cuesAnyOn(state.audio.lanes[row.id]));
+    },
+  });
+}
+
+/* small speaker icon drawn in the timeline gutter, one per lane */
+function speakerGlyph(parent, gx, gy, on) {
+  const g = svgEl('g', {
+    class: `lane-audio${on ? ' on' : ''}`, transform: `translate(${gx},${gy})`,
+    tabindex: '0', role: 'button',
+  }, parent);
+  svgEl('path', { d: 'M1 5 H4 L9 1 V13 L4 9 H1 Z', class: 'spk-body' }, g);
+  // both states are drawn; CSS shows the sound waves when armed, the cross when off
+  svgEl('path', { d: 'M11 4 Q13.4 7 11 10', class: 'spk-wave', fill: 'none' }, g);
+  svgEl('path', { d: 'M13.6 2 Q17.8 7 13.6 12', class: 'spk-wave', fill: 'none' }, g);
+  svgEl('line', { x1: 11, y1: 4, x2: 16, y2: 10, class: 'spk-x' }, g);
+  svgEl('line', { x1: 16, y1: 4, x2: 11, y2: 10, class: 'spk-x' }, g);
+  svgEl('rect', { x: -4, y: -4, width: 26, height: 22, fill: 'transparent' }, g); // hit target
+  return g;
+}
+
+/* header mute button */
+const ICON_SOUND = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/><path d="M16 8.5a5 5 0 0 1 0 7"/><path d="M18.7 6a8 8 0 0 1 0 12"/></svg>';
+const ICON_MUTED = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
+
+function initAudio() {
+  const btn = $('#audio-mute');
+  const paint = () => {
+    btn.innerHTML = state.audio.muted ? ICON_MUTED : ICON_SOUND;
+    btn.setAttribute('aria-pressed', String(!state.audio.muted));
+    btn.title = state.audio.muted ? 'Audio cues muted — click to enable' : 'Audio cues on — click to mute';
+    btn.classList.toggle('muted', state.audio.muted);
+  };
+  btn.addEventListener('click', () => {
+    state.audio.muted = !state.audio.muted;
+    saveAudio();
+    if (!state.audio.muted) audioUnlock();
+    paint();
+  });
+  paint();
+
+  const slider = $('#vol-slider'); // slider 0–100, volume 0–2 (50 = the old ceiling)
+  slider.value = String(Math.round(state.audio.volume * 50));
+  slider.addEventListener('input', () => {
+    state.audio.volume = Number(slider.value) / 50;
+    saveAudio();
+  });
+  slider.addEventListener('change', () => { audioUnlock(); cueBlip(); }); // preview level on release
 }
 
 /* ---------------- tooltip ---------------- */
@@ -153,6 +392,7 @@ function renderTimeline() {
   const svg = $('#timeline');
   svg.replaceChildren();
   tooltipHide();
+  closeCuePopover();
   clockMarks = [];
 
   const visibleCats = CATEGORY_ORDER.filter((c) => state.filters[c]);
@@ -243,6 +483,15 @@ function renderTimeline() {
     // lane label + cadence chip
     svgText(g, 16, cy + 1, 'row-label', row.name);
     if (row.cadence) svgText(g, 16, cy + 17, 'row-cadence', row.cadence);
+
+    // per-lane audio cue toggle, in the gutter to the right of the label
+    const spk = speakerGlyph(g, PAD_L - 26, top + 8, cuesAnyOn(state.audio.lanes[row.id]));
+    spk.setAttribute('aria-label', `Audio cues for ${row.name}`);
+    const openSpk = () => openLanePopover(row, spk, spk.getBoundingClientRect());
+    spk.addEventListener('click', (e) => { e.stopPropagation(); openSpk(); });
+    spk.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSpk(); }
+    });
 
     // everything time-positioned renders clipped to the plot area (viewport can scroll)
     const plot = svgEl('g', { 'clip-path': 'url(#plotclip)' }, g);
@@ -729,7 +978,10 @@ renderTimeline();
 renderCards();
 initClock();
 initHelp();
+initAudio();
 clockRender();
+
+setInterval(audioTick, 200);
 
 $('#filters-all').addEventListener('click', () => setAll(true));
 $('#filters-none').addEventListener('click', () => setAll(false));

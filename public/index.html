@@ -37,7 +37,15 @@
         </div>
       </div>
 
-      <button class="icon-btn" id="help-open" title="How to use this board" aria-label="Help">?</button>
+      <div class="header-actions">
+        <div class="audio-ctl">
+          <button class="icon-btn" id="audio-mute" title="Audio cues" aria-label="Toggle audio cues" aria-pressed="true"></button>
+          <div class="vol-flyout" id="vol-flyout">
+            <input type="range" id="vol-slider" min="0" max="100" step="1" value="80" aria-label="Audio cue volume">
+          </div>
+        </div>
+        <button class="icon-btn" id="help-open" title="How to use this board" aria-label="Help">?</button>
+      </div>
     </header>
 
     <div class="hint" id="hint">
@@ -97,6 +105,10 @@
       <p>Playing right now? Hit <b>Start</b> on the clock at the match horn — the board shows a NOW
       line, pulses anything spawning in the next 45 seconds, and lists what's next. If the clock
       drifts from the game, <b>drag the NOW line</b> along the timeline or nudge with ±1s / ±5s.</p>
+      <p><b>Audio cues.</b> Click the little speaker on any lane to arm sounds for it: a
+      <b>pre-event ding</b> 30s ahead so you start moving, a <b>5-second countdown</b>, and a
+      <b>ding on the event</b> itself — pick any combination per lane. The speaker up by this
+      button mutes everything at once.</p>
       <p class="dim">Timings sourced from
       <a href="https://www.youtube.com/watch?v=YHc-NMmPjHg" target="_blank" rel="noopener">Deathy's video guide</a>
       and the <a href="https://deadlock.wiki" target="_blank" rel="noopener">Deadlock Wiki</a>.
