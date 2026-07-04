@@ -160,7 +160,10 @@ function renderTimeline() {
   svg.style.display = visibleCats.length ? 'block' : 'none';
   if (!visibleCats.length) return;
 
-  const width = Math.max(760, host.clientWidth);
+  // On phones/narrow screens the plot can't usefully squeeze into ~350px, so we
+  // render it at a readable fixed width and let #timeline-host scroll horizontally.
+  const compact = innerWidth < 900;
+  const width = compact ? Math.max(1180, host.clientWidth) : Math.max(760, host.clientWidth);
   const plotW = width - PAD_L - PAD_R;
   const viewStart = state.viewStart;
   const viewEnd = viewStart + T_MAX;

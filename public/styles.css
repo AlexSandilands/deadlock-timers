@@ -384,7 +384,17 @@ header.site {
 }
 
 #timeline-panel { padding-bottom: 10px; }
-#timeline { display: block; width: 100%; }
+#timeline-host {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+#timeline-host::-webkit-scrollbar { height: 8px; }
+#timeline-host::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+/* Desktop: JS sizes the svg to the container so it fills exactly (no scroll).
+   Narrow screens: svg is wider than the host, which scrolls. */
+#timeline { display: block; }
 #timeline-empty {
   padding: 60px 20px 70px;
   text-align: center;
