@@ -1,0 +1,12 @@
+{
+  "name": "deadlock-timers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Every Deadlock game timer on one glanceable board, with category toggles to build up as you memorize.",
+  "scripts": {
+    "start": "serve public -l tcp://0.0.0.0:${PORT:-3000}"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}

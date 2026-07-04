@@ -1,0 +1,71 @@
+<!-- @dsCard group="Components" -->
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Alegreya+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#0a0d0b; color:#ece5d4; font:14.5px/1.45 'Alegreya Sans','Segoe UI',system-ui,sans-serif; padding:28px; display:grid; gap:26px; }
+  .spec { color:#82806f; font-size:11px; letter-spacing:.05em; margin:0 0 8px; text-transform:uppercase; font-family:'Oswald',sans-serif; }
+  .row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+
+  .btn { font:700 13.5px 'Alegreya Sans',sans-serif; color:#ece5d4; cursor:pointer;
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.14)),#23251f;
+    border:1px solid rgba(236,229,212,.32); border-radius:999px; padding:7px 16px; }
+  .btn.hover { border-color:#86efab; box-shadow:0 0 10px rgba(134,239,171,.14); }
+  .btn.primary { color:#0c1410; background:linear-gradient(180deg,#9df5bc,#6fdd9a); border-color:transparent; box-shadow:0 0 14px rgba(134,239,171,.14); }
+  .icon-btn { width:38px; height:38px; border-radius:50%; border:1px solid rgba(236,229,212,.32); background:#23251f; color:#ece5d4; font:18px 'Oswald',sans-serif; }
+
+  .toggle { --c:#86efab; display:inline-flex; align-items:center; gap:9px; background:none; border:none; color:#b5b0a1; font:600 14.5px 'Alegreya Sans',sans-serif; }
+  .toggle.on { color:#ece5d4; }
+  .toggle .sw { width:9px; height:9px; border-radius:2px; rotate:45deg; background:var(--c); opacity:.45; }
+  .toggle.on .sw { opacity:1; }
+  .toggle .track { position:relative; width:40px; height:20px; border-radius:999px; background:#171915; border:1px solid rgba(236,229,212,.16); }
+  .toggle.on .track { background:color-mix(in srgb,var(--c) 22%,#171915); border-color:color-mix(in srgb,var(--c) 55%,transparent); }
+  .toggle .knob { position:absolute; top:50%; left:1px; translate:0 -50%; width:20px; height:20px; border-radius:50%; background:#55584e; display:grid; place-items:center; }
+  .toggle.on .knob { left:19px; background:var(--c); box-shadow:0 0 10px color-mix(in srgb,var(--c) 55%,transparent); }
+  .toggle .knob svg { width:11px; height:11px; opacity:0; }
+  .toggle.on .knob svg { opacity:1; }
+
+  .stat { display:inline-flex; align-items:baseline; gap:7px; background:rgba(0,0,0,.28); border:1px solid #262a25; border-radius:6px; padding:3px 9px; font-size:12.5px; }
+  .stat .k { font:10.5px 'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.08em; color:#82806f; }
+  .stat .v { color:#ece5d4; font-weight:700; }
+
+  .hint { display:flex; align-items:center; gap:12px; max-width:640px; padding:10px 14px; background:rgba(134,239,171,.14); border:1px solid rgba(134,239,171,.35); border-left:3px solid #86efab; border-radius:8px; font-size:14.5px; }
+  .hint b { color:#86efab; }
+
+  .tt { max-width:340px; background:rgba(18,21,18,.97); border:1px solid rgba(236,229,212,.32); border-radius:10px; padding:12px 14px; box-shadow:0 10px 30px rgba(0,0,0,.6); }
+  .tt .h { display:flex; align-items:center; gap:8px; font:600 13px 'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.08em; }
+  .tt .key { width:14px; height:3px; border-radius:2px; background:#9085e9; }
+  .tt .t { margin-left:auto; font:17px 'Oswald',sans-serif; }
+  .tt p { margin:6px 0 0; font-size:13.5px; color:#b5b0a1; }
+</style>
+<div><p class="spec">Buttons — default / hover / primary / icon</p>
+  <div class="row">
+    <button class="btn">Reset</button>
+    <button class="btn hover">Reset (hover)</button>
+    <button class="btn primary">Start</button>
+    <button class="icon-btn">?</button>
+  </div>
+</div>
+<div><p class="spec">Category toggles — game-style switch, knob carries the check & glow</p>
+  <div class="row">
+    <button class="toggle on" style="--c:#199e70"><span class="sw"></span>Jungle<span class="track"><span class="knob"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5 5 9.5 10 2.5" stroke="#0c1410" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></button>
+    <button class="toggle on" style="--c:#c98500"><span class="sw"></span>Powerups<span class="track"><span class="knob"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5 5 9.5 10 2.5" stroke="#0c1410" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></button>
+    <button class="toggle" style="--c:#9085e9"><span class="sw"></span>Urn<span class="track"><span class="knob"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5 5 9.5 10 2.5" stroke="#0c1410" stroke-width="2.4"/></svg></span></span></button>
+  </div>
+</div>
+<div><p class="spec">Stat chips — uppercase key, bold value</p>
+  <div class="row">
+    <span class="stat"><span class="k">Spawn</span><span class="v">8:00</span></span>
+    <span class="stat"><span class="k">Respawn</span><span class="v">5:35 after clear</span></span>
+    <span class="stat"><span class="k">Duration</span><span class="v">2:40 (160s)</span></span>
+  </div>
+</div>
+<div><p class="spec">Hint banner — dismissible, mint wash</p>
+  <div class="hint"><span>There's a <b>lot</b> here — turn everything off, switch on <b>Jungle</b>, and build up.</span></div>
+</div>
+<div><p class="spec">Tooltip — category key line, time right-aligned</p>
+  <div class="tt">
+    <div class="h"><span class="key"></span>Soul Urn<span class="t">15:00</span></div>
+    <p>Urn spawns at 15:00 on the GREEN side.</p>
+    <p>Respawns every 5:00 on the clock, done or not.</p>
+  </div>
+</div>

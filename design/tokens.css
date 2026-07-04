@@ -1,0 +1,52 @@
+/* ============================================================
+   Deadlock Timers — canonical design tokens
+   Derived from Deadlock's in-game UI (see references/).
+   Dark only — the game has no light mode.
+   ============================================================ */
+
+:root {
+  /* ---- surfaces ---- */
+  --bg-0: #0a0d0b;                       /* page — near-black, green-tinted */
+  --bg-1: #111512;                       /* chart / well surface */
+  --panel: rgba(46, 47, 40, 0.55);       /* translucent warm-gray card */
+  --panel-solid: #23251f;                /* opaque control fill */
+
+  /* ---- ink (never pure white) ---- */
+  --ink: #ece5d4;                        /* bone / cream primary */
+  --ink-2: #b5b0a1;                      /* secondary */
+  --ink-3: #82806f;                      /* muted / labels */
+
+  /* ---- the one hero accent ---- */
+  --mint: #86efab;
+  --mint-deep: #3fbf7f;
+  --mint-glow: rgba(134, 239, 171, 0.45);
+  --mint-glow-soft: rgba(134, 239, 171, 0.14);
+
+  /* ---- chrome ---- */
+  --line: #262a25;                       /* hairline gridline / divider */
+  --border: rgba(236, 229, 212, 0.16);   /* card hairline */
+  --border-strong: rgba(236, 229, 212, 0.32);
+
+  /* ---- categorical data colors (validated on --bg-1) ---- */
+  --cat-jungle: #199e70;
+  --cat-powerups: #c98500;
+  --cat-objectives: #d95926;
+  --cat-urn: #9085e9;
+  --cat-rift: #3987e5;
+  --cat-midboss: #d55181;
+  --cat-troopers: #e66767;
+
+  /* ---- diverging resistance ramp (polarity, not identity) ---- */
+  --resist: #c2504a;                     /* resists you */
+  --resist-mid: #3a3d38;                 /* 0% neutral */
+  --resist-weak: #3e9e57;                /* melts */
+
+  /* ---- type ---- */
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;  /* condensed uppercase, tracked */
+  --font-body: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
+
+  /* ---- radii ---- */
+  --r-card: 12px;
+  --r-control: 999px;
+  --r-chip: 6px;
+}

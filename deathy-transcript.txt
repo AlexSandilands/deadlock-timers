@@ -1,0 +1,781 @@
+https://www.youtube.com/watch?v=YHc-NMmPjHg
+0:00
+Deadlock is an incredibly dense game
+0:02
+with so much information that it's
+0:03
+really easy to lose track of some of it.
+0:06
+Have you ever wondered when the rift
+0:08
+actually spawns? I mean, the patch notes
+0:09
+were a little confusing about a spawn
+0:11
+time. Or maybe the earn. Is it back to
+0:13
+every 5 minutes, every 6 minutes? Where
+0:15
+does it spawn? What about boxes? What
+0:17
+about the camps? Well, in today's video,
+0:18
+we're going to cover every timer that I
+0:20
+could think of. I'm sure that there's
+0:21
+some that I forgot in Deadlock. And this
+0:23
+includes towers as well as like walkers,
+0:26
+their resistances, box respawn times,
+0:29
+mid boss, debuffs, everything that I
+0:31
+could possibly think of. So without
+0:32
+further ado, let's get right into it.
+0:34
+Now, the first thing I want to start
+0:35
+with is the guardians. Now, people might
+0:38
+be like, there are no timers related to
+0:39
+the guardians, right? At the end of the
+0:41
+day, it's just the guardians spawn at 0
+0:42
+minutes and you kill them whenever you
+0:43
+want. And that's slightly correct.
+0:45
+However, the guardians have resistance
+0:47
+dependent on the time in the game that
+0:49
+you're at. So for the guardians at zero
+0:52
+minutes they have 50% damage resistance.
+0:54
+Now you can't actually bypass this
+0:56
+damage resistance in any way that I know
+0:57
+of. Maybe someone let me know in the
+0:59
+comments if there is. At 3 minutes that
+1:01
+goes down to 25%. Now this is not a on
+1:04
+or off. This is gradual. Right? So these
+1:07
+are just points in the game. So from 0
+1:09
+minutes all the way to 12 minutes it
+1:11
+scales from 50% to minus 50. Now that
+1:14
+doesn't mean that if it's 259 it's still
+1:16
+at 50%, right? It's going to be
+1:18
+gradually scaling every second. It's
+1:20
+going to get updated, right? So, these
+1:21
+are just break points. So, the
+1:24
+six-minute breakpoint is the point at
+1:25
+which the guardian no longer, you know,
+1:27
+takes less damage. It takes full damage
+1:30
+from any of your attacks. So, if your
+1:31
+gun does 100 DPS, the guardian is going
+1:33
+to take 100 DPS. Now, at 9 minutes, if
+1:36
+your gun does 100 DPS, the guardian will
+1:38
+take 125 DPS, right? So, this
+1:41
+essentially means that at 6 minutes is
+1:44
+when the game expects you to start
+1:45
+killing guardians. Although, you can
+1:47
+kill them earlier. It's just
+1:48
+significantly harder. And past 12
+1:50
+minutes, guardians are a complete joke
+1:51
+and you can kill them anytime. Now, for
+1:53
+walkers, it's similar. However, the
+1:55
+resistance curve is even more drastic.
+1:57
+So, it starts at 65% resistance at 0
+2:00
+minutes, and it goes all the way down to
+2:02
+minus 65% at 18 minutes. This means the
+2:04
+game once it's 18 minutes, Yoshi's like,
+2:06
+"You you got to take your walkers, man.
+2:08
+It's it's time." You know, it's time. So
+2:11
+the 0% break point is at around 9
+2:13
+minutes, which means that this is when
+2:14
+it starts to be somewhat realistic slash
+2:17
+possible to take a walker, but past 12
+2:19
+minutes, it's actually very very easy to
+2:21
+take a walker if you just have a strong
+2:23
+wave and you have like enough damage.
+2:26
+Now, walkers have bullet resistance um
+2:28
+and they don't have any spirit
+2:29
+resistance. So they have 35% bullet
+2:31
+resist. Um however, most gun heroes
+2:33
+typically do more sustained damage. So
+2:34
+it's still they're still usually better
+2:36
+at taking walkers. But some heroes that
+2:38
+do sustain damage that is more spirit
+2:40
+are going to be really good at taking
+2:41
+walkers. For example, you can think of
+2:43
+something like seven or you know
+2:44
+Sinclair with his bolts is really really
+2:46
+good at it. Now let's get into the boxes
+2:49
+in the jungle, right? So we're going to
+2:50
+start with the boxes. The boxes, they
+2:52
+spawn at 3 minutes, right? So these
+2:54
+boxes around the map, this includes the
+2:55
+golden statues as well. They all spawn
+2:57
+at 3 minutes. Uh and they respawn every
+3:00
+3 minutes. However, there is one
+3:02
+exception, which is the midboxes. These
+3:04
+midboxes right here, they spawn at 10
+3:06
+minutes, but they still respawn every 3
+3:08
+minutes. And I just want to give you
+3:10
+guys a quick little tip. If you don't
+3:11
+know, the midboxes give about they give
+3:13
+more money than a center sacrifice. So,
+3:15
+these are worth a lot of money on
+3:17
+average. So, you should be doing these
+3:19
+every 3 minutes if you can. If you're in
+3:20
+the middle of the map, you got nothing
+3:21
+to do, these are a great thing to do.
+3:23
+Now, tier one camp, the little guys,
+3:25
+they spawn at 2 minutes and then they
+3:26
+respawn every 1 minute and 25 seconds.
+3:29
+So, if you kill them right at 2 minutes,
+3:30
+they're going to respawn at 325. Now,
+3:32
+usually it takes a few seconds to kill
+3:33
+them. So, you know, the second respawn's
+3:35
+more like 330, but once again, depends
+3:37
+how efficient you are. One thing to note
+3:39
+about these respawns is that the box
+3:41
+respawns as well as all the camp
+3:42
+respawns are dependent on clearing the
+3:45
+camp or the boxes. Now, for camps to
+3:47
+respawn, they have to be fully cleared
+3:48
+out. So, what that means is that if even
+3:50
+one creature remains in the camp, uh it
+3:52
+will not respawn. Like, the respawn
+3:54
+timer will not start, right? So, you
+3:56
+have to fully clear for this 125 to
+3:58
+start. Tier 2 camps spawn at 5 minutes
+4:00
+and they respawn every 4 minute and 50
+4:03
+seconds. Tier three camps spawn at 8
+4:06
+minutes and they respawn every 5 minutes
+4:08
+and 35 seconds. One small note to add
+4:10
+about both tier three and tier three and
+4:13
+tier 2 camps is that some camps will
+4:16
+have a mixture of creatures. For
+4:18
+example, this camp right here has some
+4:20
+tier 2, which are here, and some tier
+4:22
+three. Uh it will always have the spawn
+4:24
+time of the higher tier. So, for
+4:27
+example, this camp spawns at 8 minutes.
+4:29
+Even though it has some tier 2
+4:30
+creatures, it has one tier three and
+4:31
+therefore it will spawn at 8 minutes and
+4:33
+it will respawn every 5 minutes and 35
+4:35
+seconds.
+4:37
+And last but not least, we've got the
+4:39
+sinners, which spawn at 8 minutes, and
+4:40
+they respawn every 5 minutes. Now, once
+4:43
+again, for the sinners to respawn that
+4:44
+you they have to be fully cleared out.
+4:46
+So, for example, the double centers
+4:47
+here, you have to not only kill both
+4:48
+centers, but also kill this little
+4:50
+thing. So, I've seen so many REM players
+4:52
+that they'll take their own team
+4:53
+centers, which, you know, that's
+4:54
+debatable. Is it fine? is not fine. But
+4:56
+on top of that, they're going to leave
+4:58
+this little thing so their centers don't
+4:59
+even respawn. So if you're clearing your
+5:01
+own centers, please kill this neutral.
+5:03
+Uh if you are clearing enemy centers,
+5:05
+you can leave this neutral alive and
+5:06
+their centers won't start the respawn
+5:08
+timer right away. Now, let's get into
+5:11
+objectives. So the urn is the first
+5:13
+objective. It spawns at 10 minutes. Now
+5:16
+the urn is different compared to the
+5:18
+jungle because its respawn time is not
+5:19
+affected by whether the previous earn
+5:21
+was done or not. However, if someone is
+5:24
+still holding the urn, the next turn
+5:26
+will not spawn, right? So, it'll skip a
+5:28
+spawn. This is a pretty rare scenario,
+5:30
+but it does happen. So, it's worth
+5:31
+mentioning. Now, the earn responds every
+5:33
+5 minutes, regardless of whether
+5:35
+previous earn was done or not. Like I
+5:36
+said, the only exception to this, if
+5:38
+someone is actively holding the earn,
+5:40
+the next will not spawn. Uh if if
+5:42
+someone is actively holding the earn at
+5:43
+15 minutes, it won't spawn the 15minute
+5:46
+earn and it'll just skip it. So, it
+5:47
+spawns at 10, 15, 20, 25, etc. The
+5:50
+location of the urn is the first urn
+5:52
+always spawns yellow and the second urn
+5:55
+always spawns green. Um and then it just
+5:57
+alternates, right? So it just goes
+5:59
+yellow, green, yellow, green. So the
+6:01
+easiest way to remember it for me is
+6:03
+that if the time is an even number, so
+6:05
+10 minutes, 20 minutes, 30 minutes, the
+6:08
+earn is yellow. And if the time is an
+6:09
+uneven number, the earn is green.
+6:12
+However, do keep in mind that if someone
+6:14
+holds the urn and the one of the urns
+6:17
+does not spawn, then that technique does
+6:19
+not work, right? So, if someone like
+6:20
+that happens pretty rarely, but if one
+6:22
+urn doesn't spawn, it kind of throws the
+6:24
+whole, you know, thing uh enchantles.
+6:26
+Now, the rift spawns between 11 and 13
+6:29
+minutes. It basically uh spawns at 12
+6:32
+minutes, but it has a plus or minus 1
+6:34
+minute respawn time. Not respawn time,
+6:36
+but plus or minus 1 minute spawn time.
+6:38
+So, it spawns between 11 and 13 minutes,
+6:41
+and it respawns every 7 minutes. So, I
+6:44
+do believe that the respawn has no
+6:45
+variation. Now, this is quite a new
+6:47
+objective, so it remains to be tested,
+6:49
+but I'm pretty sure the respawn is
+6:50
+exactly 7 minutes on the dot. So, when
+6:52
+you clear it, it should spawn exactly 7
+6:54
+minutes after, but I I haven't had
+6:56
+enough data yet to know for sure. I
+6:58
+haven't paid enough attention to my
+6:59
+game, so please let me know in the
+7:01
+comments, but that's how it should. And
+7:03
+as far as the location, I actually I I
+7:05
+think it alternates sides. Like I
+7:07
+haven't seen it on the same side yet,
+7:09
+but I'm not actually 100% sure whether
+7:11
+it does alternate sides or whether it
+7:12
+can spawn on the same side of the map
+7:14
+twice. However, I'm fairly certain that
+7:16
+the first spawn is random. Which side it
+7:19
+spawns on, right? So, as far as like
+7:21
+further spawns, I do believe it
+7:22
+alternates, but I'm not entirely sure.
+7:24
+So, don't take my word for it. Like, it
+7:26
+could it could just spawn on the same
+7:27
+side multiple times. I'm honestly not
+7:28
+sure. When I do know, I will update this
+7:31
+uh whiteboard here, which I'll give you
+7:32
+guys a link to the whiteboard in the
+7:33
+description. Now, mid boss spawns at
+7:35
+zero minutes, which it spawns right
+7:37
+away. So, it didn't used to be the case.
+7:38
+Um, and the respawn changes based on
+7:42
+which mid boss it was. So, if you killed
+7:44
+your first mid boss, it'll spawn in 7
+7:46
+minutes. If it's your second mid boss
+7:48
+kill, it'll spawn in 6 minutes. And if
+7:50
+it's your third or more mid boss kill,
+7:52
+it'll spawn in 5 minutes. So, after like
+7:55
+the fourth, fifth, seventh, you know,
+7:56
+miss skills, whatever, how however many
+7:59
+you got, it it'll still respawn no
+8:01
+faster than 5 minutes. Now, the
+8:02
+rejuvenator duration just got changed
+8:04
+recently and it's now 3 minutes instead
+8:06
+of four. So, we've got some
+8:07
+miscellaneous stuff as well to go over
+8:08
+some extra timers, right? The first
+8:10
+thing is the bridge buffs, which are
+8:12
+also called powerups sometimes. So,
+8:14
+these spawn at 5 minutes and then they
+8:15
+spawn every 5 minutes regardless of
+8:17
+whether or not the previous buff was
+8:19
+taken. So, even if the buff stays there,
+8:21
+it'll still respawn every 5 minutes. Uh,
+8:23
+it has nothing to do with whether you
+8:24
+pick it up. So, it'll it'll spawn at 5,
+8:26
+10, 15, 20. And the buff's duration
+8:30
+lasts a 160 seconds, which is two
+8:32
+minutes and 40 seconds. So almost three
+8:34
+minutes. So these last a really long
+8:36
+time. Uh you can think about it this
+8:38
+way. The buffs essentially have like 50%
+8:40
+uptime. Like if you're getting the buff
+8:42
+off cool down every time, it responds
+8:44
+every 5 minutes and it lasts 2 minutes
+8:46
+and 40 seconds. So they have slightly
+8:47
+more than 50% uptime if you're always
+8:49
+getting a buff. So it's very
+8:50
+significant. The other thing too is that
+8:52
+the buff will not always last long
+8:55
+enough for the first rift fight. So, the
+8:57
+rift fight can spawn between 11 and 13
+8:59
+minutes. If the rift fight spawns at
+9:01
+like 11:30, right? Then you'll have
+9:03
+still have your buff and it'll be active
+9:05
+for the whole fight. However, if the
+9:06
+rift spawns later toward 13 minutes,
+9:08
+well, you already have lost your buff.
+9:11
+So, that's something to consider with
+9:12
+this RNG rift is that it can kind of
+9:14
+like mess with how much of an advantage
+9:15
+this buff because you might have it for
+9:16
+the rift fight, but you also might not.
+9:18
+Now, let's talk troopers for a second.
+9:19
+Okay, how often do troopers spawn? So,
+9:22
+the troopers spawn every for from 0 to
+9:25
+20 minutes. they spawn every 30 seconds.
+9:27
+So, it kind of varies through the match
+9:28
+length. Um, then from 20 to 35 minutes,
+9:31
+they spawn every 25 seconds. And past 35
+9:34
+minutes, they spawn every 20 seconds.
+9:35
+So, as the as the game speeds up,
+9:37
+there's more troopers, there's more
+9:38
+money, there's more pressure. So, you
+9:40
+know, the waves uh the bush the base can
+9:42
+be pushed more. Essentially, they just
+9:44
+want the game to end. At 35 minutes, the
+9:45
+troopers are done, and they're like,
+9:46
+"Let's just let's just end this game.
+9:48
+Let's move on." Now, some fun fact about
+9:50
+the troopers is that they gain spirit
+9:51
+resist through the game. So, I thought
+9:53
+this was worth adding because, you know,
+9:54
+it's related to time. So, basically at
+9:57
+20 minutes, they'll have 20% spirit
+9:58
+resist and they'll have 70% at 50
+10:00
+minutes, but it scales kind of like, you
+10:02
+know, through the game. So, um, as it
+10:05
+progresses, they get more and more
+10:06
+spirit resistance as the game becomes
+10:07
+later. Now, at 35 minutes, they also all
+10:10
+get 50% extra HP. So, this is not, uh,
+10:13
+scaling like most mechanics in this game
+10:15
+are scaling, not on or off. This is an
+10:17
+on or off mechanic, meaning at 345 59
+10:20
+they don't have anything and at 35
+10:22
+minutes on the dot they all get 50%
+10:23
+extra HP just instantly like that. And
+10:26
+they also grow in size in their model.
+10:28
+The golden the golden statue buffs also
+10:30
+have a similar on or off mechanic. Um so
+10:33
+basically the initially at zero minutes
+10:36
+they're called the tier zero buffs. So
+10:38
+like the initial buffs and then they
+10:40
+scale twice through the game. So they
+10:42
+scale at 10 minutes and at 30 minutes.
+10:44
+So, an example with the HP buff is that
+10:47
+the HP buff at the beginning of the game
+10:48
+is 15 HP. At 10 minutes, it becomes 20
+10:51
+HP and at 30 minutes it becomes 30 HP.
+10:54
+This is why you'll see a lot of people
+10:55
+uh pop the egg either at 10 minutes or
+10:58
+at 30 minutes because, you know, these
+10:59
+are kind of the break points where you
+11:00
+get, you know, higher quality buffs. So,
+11:03
+if you can technically hold the egg
+11:04
+until 30 minutes, you get a lot a lot of
+11:06
+buffs that are really really strong. Um,
+11:09
+so that's why you you'll see some
+11:10
+people, but it's a little troll, but it
+11:12
+can be funny. Now, as far as holding the
+11:13
+egg for 10 minutes, that's a very
+11:14
+standard strategy because, you know, you
+11:16
+get rewarded for holding the egg until
+11:17
+10 minutes, and it's usually not worth
+11:19
+popping up before. And also, this also
+11:21
+highlights, you know, the importance of
+11:22
+golden statue runs uh even later in the
+11:24
+game as they're worth more. Now, for the
+11:27
+end of the video, I'd like to give a
+11:28
+quick shout out to the Deadlock Wiki.
+11:30
+I'll put a link in the description
+11:31
+below. A lot of this information is
+11:33
+fairly hard to find on your own if you
+11:36
+don't have access to the wiki. to the
+11:37
+wiki and everybody that updates it. You
+11:39
+know, if you're watching this video and
+11:40
+you've updated the wiki, thank you so
+11:41
+much for your work. Uh, honestly, makes
+11:43
+my job easier, but it also makes
+11:44
+everybody's life easier. If you want any
+11:46
+info, you just go on the wiki and it's
+11:48
+almost always up to date. Sometimes
+11:49
+there's some things that are missing or
+11:51
+some slight inaccuracies. Um, but I
+11:53
+double checked pretty much most of the
+11:54
+information here and I believe
+11:55
+everything is up to date. Now, there's a
+11:57
+lot of info here, so I'm almost certain
+11:59
+that there's probably a mistake
+12:00
+somewhere. Uh, there's probably things
+12:02
+that I forgot. So, if you notice
+12:03
+anything, put it in the comments below
+12:06
+and I'll try to pin any comments that
+12:08
+corrects anything that I said that was
+12:09
+wrong or that adds additional details
+12:11
+that are, you know, uh, valuable for
+12:13
+people.
+12:15
+Thank you guys so much for watching and
+12:16
+sorry for the info dump. Hopefully you
+12:18
+guys enjoyed and hopefully this helps
+12:19
+you in your Deadlock games. Link to the
+12:21
+whiteboard will be in the description
+12:22
+and I will catch you guys next time.

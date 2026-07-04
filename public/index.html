@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deadlock Timers</title>
+  <meta name="description" content="Every Deadlock game timer on one board — jungle, powerups, objectives, urn, rift, mid boss and trooper timings. Toggle categories on as you memorize them.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0d0b'/%3E%3Cpath d='M16 5l3 8 8 3-8 3-3 8-3-8-8-3 8-3z' fill='%2386efab'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header class="site">
+      <div class="title-block">
+        <h1>Deadlock Timers</h1>
+        <p class="sub">Every timer on one board — build it up as you memorize.</p>
+      </div>
+
+      <div class="clock" id="clock-wrap">
+        <div class="clock-time" id="clock-time">0:00</div>
+        <div class="clock-btns">
+          <button class="btn primary" id="clock-start">Start</button>
+          <button class="btn small" id="clock-back" title="nudge −5s">−5s</button>
+          <button class="btn small" id="clock-back1" title="nudge −1s">−1s</button>
+          <button class="btn small" id="clock-fwd1" title="nudge +1s">+1s</button>
+          <button class="btn small" id="clock-fwd" title="nudge +5s">+5s</button>
+          <button class="btn small" id="clock-reset">Reset</button>
+        </div>
+        <div class="clock-next">
+          <span class="lbl">Next up</span>
+          <div id="clock-next-list"></div>
+        </div>
+      </div>
+
+      <button class="icon-btn" id="help-open" title="How to use this board" aria-label="Help">?</button>
+    </header>
+
+    <div class="hint" id="hint">
+      <span>There's a <b>lot</b> here — that's the point, and it's overwhelming at first.
+      Turn everything off, switch on <b>Jungle</b>, and add a category back each time one feels automatic.</span>
+      <button class="close" aria-label="Dismiss">✕</button>
+    </div>
+
+    <nav class="filters" aria-label="Category filters">
+      <span class="label">Show</span>
+      <div id="filter-toggles" style="display:contents"></div>
+      <div class="bulk">
+        <button class="btn small" id="filters-all">All</button>
+        <button class="btn small" id="filters-none">None</button>
+      </div>
+    </nav>
+
+    <section class="panel" id="timeline-panel">
+      <h2>Match Timeline</h2>
+      <div id="timeline-host">
+        <svg id="timeline" role="group" aria-label="Timeline of Deadlock spawn and breakpoint timings from 0 to 40 minutes"></svg>
+        <div id="timeline-empty" style="display:none">
+          Nothing on the board. Flip a toggle above — <b>Jungle</b> is the classic place to start.
+        </div>
+      </div>
+    </section>
+
+    <section id="cards-section">
+      <h2>Reference</h2>
+      <p class="section-sub">Full numbers for everything currently toggled on — no hovering required.</p>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <footer class="site">
+      <span id="updated"></span>
+      <span>Timings from <a href="https://www.youtube.com/watch?v=YHc-NMmPjHg" target="_blank" rel="noopener">Deathy's timer guide</a> and the <a href="https://deadlock.wiki" target="_blank" rel="noopener">Deadlock Wiki</a>.</span>
+      <span>Deadlock is a trademark of Valve Corporation. This is an unofficial fan tool, not affiliated with or endorsed by Valve.</span>
+      <span>Patches move numbers — trust the game over this board when they disagree.</span>
+    </footer>
+  </div>
+
+  <dialog id="help">
+    <div class="panel">
+      <h2>How to use this board</h2>
+      <p>Deadlock has an absurd number of timers, and seeing all of them at once is genuinely
+      overwhelming — nobody memorizes this board in one sitting, and you shouldn't try.</p>
+      <p>Instead, <b>build it up</b>:</p>
+      <ol>
+        <li>Hit <b>None</b>, then toggle on just <b>Jungle</b> — boxes and camps carry your early game.</li>
+        <li>Once those respawns feel automatic, add <b>Powerups</b>.</li>
+        <li>Keep layering: <b>Guardians &amp; Walkers</b> windows, then <b>Urn</b>, <b>Rift</b>, <b>Mid Boss</b>, <b>Troopers</b>.</li>
+        <li>Turn a category <i>off</i> once you know it cold — a smaller board is a faster glance.</li>
+      </ol>
+      <p>Hover (or tab to) anything on the timeline for the full story. Solid diamonds are spawns,
+      hollow diamonds are breakpoints, bars show durations and phases, and the red→green ramps show
+      when objectives stop resisting damage. Your toggles are remembered between visits.</p>
+      <p>Playing right now? Hit <b>Start</b> on the clock at the match horn — the board shows a NOW
+      line, pulses anything spawning in the next 45 seconds, and lists what's next. If the clock
+      drifts from the game, <b>drag the NOW line</b> along the timeline or nudge with ±1s / ±5s.</p>
+      <p class="dim">Timings sourced from
+      <a href="https://www.youtube.com/watch?v=YHc-NMmPjHg" target="_blank" rel="noopener">Deathy's video guide</a>
+      and the <a href="https://deadlock.wiki" target="_blank" rel="noopener">Deadlock Wiki</a>.
+      Valve moves these numbers between patches.</p>
+      <div class="modal-foot">
+        <button class="btn primary" id="help-close">Got it</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
