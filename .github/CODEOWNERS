@@ -1,0 +1,7 @@
+# Default owners — automatically requested for review on every pull request.
+# Later matches take precedence over earlier ones.
+
+*       @AlexSandilands
+
+# Timer data is the part patches touch most — keep an eye on correctness.
+/public/data.js   @AlexSandilands
