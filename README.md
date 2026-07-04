@@ -4,7 +4,6 @@
 
 ![Deadlock fan tool](https://img.shields.io/badge/Deadlock-fan_tool-86efab?labelColor=0a0d0b)
 ![Vanilla JS](https://img.shields.io/badge/vanilla_JS-no_build_step-c98500?labelColor=0a0d0b)
-![Railway ready](https://img.shields.io/badge/Railway-one_click_deploy-9085e9?labelColor=0a0d0b)
 ![Data patch](https://img.shields.io/badge/timings-July_2026-3987e5?labelColor=0a0d0b)
 
 Deadlock has an absurd number of timers — camps, boxes, buffs, resistance windows, urn,
@@ -49,15 +48,6 @@ No build step — it's a static site.
 npx serve public          # or: python -m http.server 8641 --directory public
 ```
 
-## Deploy on Railway
-
-The repo is Railway-ready: Nixpacks detects `package.json` and runs `npm start`,
-which serves `public/` on `$PORT`.
-
-1. Fork or push this repo to GitHub.
-2. In Railway: **New Project → Deploy from GitHub repo** and pick it.
-3. Done — no variables or config needed.
-
 ## Project layout
 
 ```
@@ -65,7 +55,6 @@ public/           the site (index.html, styles.css, app.js, data.js)
 design/           design-system bundle (brief, tokens, component previews),
                   synced to a Claude Design project
 assets/           screenshots used in this README
-deathy-transcript.txt   source for all timer numbers
 ```
 
 All timings live in `public/data.js` as plain data — marks, phase segments,
