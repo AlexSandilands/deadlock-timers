@@ -44,13 +44,14 @@ function loadAudio() {
     if (s && typeof s === 'object') {
       return {
         muted: !!s.muted,
+        customMuted: !!s.customMuted,
         volume: typeof s.volume === 'number' ? Math.min(2, Math.max(0, s.volume)) : 1,
         lanes: (s.lanes && typeof s.lanes === 'object') ? s.lanes : {},
         custom: Array.isArray(s.custom) ? s.custom : [],
       };
     }
   } catch (_) { /* fresh visit */ }
-  return { muted: false, volume: 1, lanes: {}, custom: [] };
+  return { muted: false, customMuted: false, volume: 1, lanes: {}, custom: [] };
 }
 function saveAudio() { localStorage.setItem(STORE_AUDIO, JSON.stringify(state.audio)); }
 
@@ -116,9 +117,11 @@ function audioEvents() {
     if (!cuesAnyOn(c)) continue;
     for (const t of laneEventTimes(row)) evs.push({ sec: t * 60, cues: c });
   }
-  for (const node of state.audio.custom) {
-    if (!cuesAnyOn(node.cues)) continue;
-    evs.push({ sec: node.t * 60, cues: node.cues });
+  if (!state.audio.customMuted) {
+    for (const node of state.audio.custom) {
+      if (!cuesAnyOn(node.cues)) continue;
+      evs.push({ sec: node.t * 60, cues: node.cues });
+    }
   }
   return evs;
 }
@@ -155,6 +158,7 @@ const audioPop = document.createElement('div');
 audioPop.className = 'audio-pop';
 document.body.appendChild(audioPop);
 let audioPopOpen = false;
+let customDirty = false; // a custom node's label changed while its popover was open
 
 function onPopDismiss(e) {
   if (e.type === 'keydown') { if (e.key === 'Escape') closeCuePopover(); return; }
@@ -166,6 +170,7 @@ function closeCuePopover() {
   audioPop.classList.remove('show');
   document.removeEventListener('pointerdown', onPopDismiss, true);
   document.removeEventListener('keydown', onPopDismiss, true);
+  if (customDirty) { customDirty = false; renderTimeline(); }
 }
 function openCuePopover(anchorRect, opts) {
   // opts: { title, cues, onToggle(cue, on), footer? }
@@ -225,6 +230,104 @@ function openLanePopover(row, glyph, anchorRect) {
       saveAudio();
       glyph.classList.toggle('on', cuesAnyOn(state.audio.lanes[row.id]));
     },
+  });
+}
+
+/* -- custom nodes: shift-click the timeline to drop your own cue -- */
+let customSeq = 0;
+function nextCustomId() { return `c${Date.now()}_${customSeq++}`; }
+
+function customRow() {
+  return {
+    id: '__custom', cat: '__custom', name: 'Custom', custom: true,
+    cadence: 'click this rail to add a cue',
+    marks: state.audio.custom
+      .slice()
+      .sort((a, b) => a.t - b.t)
+      .map((n) => {
+        const nm = n.label || mmss(n.t);
+        return {
+          t: n.t, kind: 'spawn', label: nm, title: nm, node: n, // title feeds the "Next up" list
+          tip: [`Custom cue at ${mmss(n.t)}.`, 'Click to edit · Alt-click to delete.'],
+        };
+      }),
+  };
+}
+
+function createCustomNode(t, e) {
+  const node = { id: nextCustomId(), t, label: mmss(t), cues: { pre: true, count: true, start: true } };
+  state.audio.custom.push(node);
+  saveAudio();
+  renderTimeline();
+  // anchor the editor at the cursor (the freshly drawn diamond is hard to locate)
+  openNodeEditor(node, { left: e.clientX, right: e.clientX, top: e.clientY, bottom: e.clientY });
+}
+
+function deleteCustom(id) {
+  state.audio.custom = state.audio.custom.filter((n) => n.id !== id);
+  saveAudio();
+  closeCuePopover();
+  renderTimeline();
+}
+
+/* parse "m:ss" / "mm:ss" back to decimal minutes; null if malformed */
+function parseMmss(str) {
+  const m = String(str).trim().match(/^(\d{1,3}):([0-5]?\d)$/);
+  return m ? Number(m[1]) + Number(m[2]) / 60 : null;
+}
+
+function openNodeEditor(node, anchorRect) {
+  const foot = document.createElement('div');
+  foot.className = 'ap-foot';
+
+  const nameRow = document.createElement('label');
+  nameRow.className = 'ap-name';
+  const nl = document.createElement('span');
+  nl.textContent = 'Label';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.maxLength = 24;
+  input.value = node.label;
+  input.addEventListener('input', () => {
+    node.label = input.value;
+    customDirty = true; // refresh the on-timeline text when the popover closes
+    saveAudio();
+  });
+  nameRow.append(nl, input);
+
+  const timeRow = document.createElement('label');
+  timeRow.className = 'ap-name';
+  const tl = document.createElement('span');
+  tl.textContent = 'Time';
+  const time = document.createElement('input');
+  time.type = 'text';
+  time.className = 'ap-timeinput';
+  time.inputMode = 'numeric';
+  time.value = mmss(node.t);
+  const applyTime = (normalize) => {
+    const parsed = parseMmss(time.value);
+    if (parsed == null) { if (normalize) time.value = mmss(node.t); return; }
+    node.t = parsed;
+    customDirty = true; // reposition on the timeline when the popover closes
+    saveAudio();
+    if (normalize) time.value = mmss(node.t);
+  };
+  time.addEventListener('input', () => applyTime(false)); // apply the moment a valid m:ss is typed
+  time.addEventListener('change', () => applyTime(true)); // normalize on blur/enter
+  timeRow.append(tl, time);
+
+  const del = document.createElement('button');
+  del.className = 'ap-del';
+  del.textContent = 'Delete node';
+  del.addEventListener('click', () => deleteCustom(node.id));
+
+  foot.append(nameRow, timeRow, del);
+
+  openCuePopover(anchorRect, {
+    title: 'Custom cue',
+    cues: node.cues,
+    onToggle: (cue, on) => { node.cues[cue] = on; saveAudio(); },
+    footer: foot,
   });
 }
 
@@ -365,6 +468,10 @@ const CAT_H = 36;
 const ROW_H = 52;
 const BAR_H = 15;
 
+/* synthetic category for user-placed custom nodes (not a game category) */
+const CUSTOM_CAT = { name: 'Custom', color: '#39c0b5', blurb: 'Your own timing nodes' };
+const catOf = (id) => (id === '__custom' ? CUSTOM_CAT : CATEGORIES[id]);
+
 /* click-to-project respawns (rift, mid boss) */
 function doShift(row, e) {
   const shift = (state.shifts[row.id] ||= { count: 0, t: null });
@@ -385,7 +492,7 @@ function doShift(row, e) {
   renderTimeline();
 }
 
-let clockMarks = []; // [{t, el, rowName, catId, sub}] for now-line highlighting / next-up
+let clockMarks = []; // [{t, el, rowName, color, sub}] for now-line highlighting / next-up
 
 function renderTimeline() {
   const host = $('#timeline-host');
@@ -396,9 +503,11 @@ function renderTimeline() {
   clockMarks = [];
 
   const visibleCats = CATEGORY_ORDER.filter((c) => state.filters[c]);
-  $('#timeline-empty').style.display = visibleCats.length ? 'none' : 'block';
-  svg.style.display = visibleCats.length ? 'block' : 'none';
-  if (!visibleCats.length) return;
+  // the board is up if any category is on OR the user has custom nodes to show
+  const showBoard = visibleCats.length > 0 || state.audio.custom.length > 0;
+  $('#timeline-empty').style.display = showBoard ? 'none' : 'block';
+  svg.style.display = showBoard ? 'block' : 'none';
+  if (!showBoard) return;
 
   // On phones/narrow screens the plot can't usefully squeeze into ~350px, so we
   // render it at a readable fixed width and let #timeline-host scroll horizontally.
@@ -420,6 +529,12 @@ function renderTimeline() {
       layout.push({ kind: 'row', row, y });
       y += ROW_H;
     }
+  }
+  { // the custom lane is always present (independent of filters) so its rail is clickable
+    layout.push({ kind: 'cat', catId: '__custom', y });
+    y += CAT_H;
+    layout.push({ kind: 'row', row: customRow(), y });
+    y += ROW_H;
   }
   const height = y + 14;
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
@@ -448,17 +563,33 @@ function renderTimeline() {
   /* rows */
   for (const item of layout) {
     if (item.kind === 'cat') {
-      const cat = CATEGORIES[item.catId];
+      const cat = catOf(item.catId);
       const g = svgEl('g', {}, svg);
       svgEl('rect', {
         x: 16, y: item.y + CAT_H - 14, width: 18, height: 4, rx: 2, fill: cat.color,
       }, g);
       svgText(g, 42, item.y + CAT_H - 9, 'cat-label', cat.name.toUpperCase());
+      // "clear all" affordance on the custom header, only when there's something to clear
+      if (item.catId === '__custom' && state.audio.custom.length) {
+        const clr = svgText(g, 132, item.y + CAT_H - 9, 'cust-clear', 'clear all');
+        clr.setAttribute('role', 'button');
+        clr.setAttribute('tabindex', '0');
+        const clearAll = () => {
+          if (!confirm('Delete all custom cue nodes?')) return;
+          state.audio.custom = [];
+          saveAudio();
+          renderTimeline();
+        };
+        clr.addEventListener('click', (e) => { e.stopPropagation(); clearAll(); });
+        clr.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); clearAll(); }
+        });
+      }
       continue;
     }
 
     const { row } = item;
-    const cat = CATEGORIES[row.cat];
+    const cat = catOf(row.cat);
     const color = cat.color;
     const top = item.y;
     const cy = top + 21;
@@ -484,14 +615,61 @@ function renderTimeline() {
     svgText(g, 16, cy + 1, 'row-label', row.name);
     if (row.cadence) svgText(g, 16, cy + 17, 'row-cadence', row.cadence);
 
-    // per-lane audio cue toggle, in the gutter to the right of the label
-    const spk = speakerGlyph(g, PAD_L - 26, top + 8, cuesAnyOn(state.audio.lanes[row.id]));
-    spk.setAttribute('aria-label', `Audio cues for ${row.name}`);
-    const openSpk = () => openLanePopover(row, spk, spk.getBoundingClientRect());
-    spk.addEventListener('click', (e) => { e.stopPropagation(); openSpk(); });
-    spk.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSpk(); }
-    });
+    // audio glyph in the gutter, centred on the mark line
+    const spkX = PAD_L - 31;
+    const spkY = top + 14;
+    if (!row.custom) {
+      // per-lane cue toggle: opens the three-cue popover
+      const spk = speakerGlyph(g, spkX, spkY, cuesAnyOn(state.audio.lanes[row.id]));
+      spk.setAttribute('aria-label', `Audio cues for ${row.name}`);
+      const openSpk = () => openLanePopover(row, spk, spk.getBoundingClientRect());
+      spk.addEventListener('click', (e) => { e.stopPropagation(); openSpk(); });
+      spk.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSpk(); }
+      });
+    } else {
+      // custom nodes each carry their own cues, so this is a master mute for the whole rail
+      const spk = speakerGlyph(g, spkX, spkY, !state.audio.customMuted);
+      spk.setAttribute('aria-label', 'Mute all custom cues');
+      const toggle = () => {
+        state.audio.customMuted = !state.audio.customMuted;
+        saveAudio();
+        spk.classList.toggle('on', !state.audio.customMuted);
+      };
+      spk.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+      spk.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    }
+
+    // custom lane: click the empty rail to drop a node; hovering shows a ghost node
+    // plus a full-height alignment line so you can see where it lands against other rails
+    if (row.custom) {
+      const railT = (clientX) => {
+        const raw = viewStart + ((clientX - svg.getBoundingClientRect().left) - PAD_L) / plotW * T_MAX;
+        return Math.max(0, Math.round(raw * 60) / 60); // snap to the second
+      };
+      const ghost = svgEl('g', { class: 'cust-ghost', visibility: 'hidden' }, svg);
+      const gLine = svgEl('line', { class: 'cust-ghost-line', y1: AXIS_H - 6, y2: height - 10 }, ghost);
+      const gDia = svgEl('path', { class: 'cust-ghost-dia', d: '' }, ghost);
+      const gLbl = svgText(ghost, 0, cy + BAR_H / 2 + 16, 'cust-ghost-lbl', '', 'middle');
+      const moveGhost = (e) => {
+        const t = railT(e.clientX);
+        const gx = x(t);
+        ghost.setAttribute('visibility', 'visible');
+        gLine.setAttribute('x1', gx); gLine.setAttribute('x2', gx);
+        gDia.setAttribute('d', diamondPath(gx, cy, 7.5));
+        gLbl.setAttribute('x', gx);
+        gLbl.textContent = mmss(t);
+      };
+      const rail = svgEl('rect', {
+        x: PAD_L, y: top + 2, width: plotW, height: ROW_H - 4, fill: 'transparent', class: 'custom-rail',
+      }, g);
+      rail.addEventListener('pointerenter', moveGhost);
+      rail.addEventListener('pointermove', moveGhost);
+      rail.addEventListener('pointerleave', () => ghost.setAttribute('visibility', 'hidden'));
+      rail.addEventListener('click', (e) => { e.stopPropagation(); createCustomNode(railT(e.clientX), e); });
+    }
 
     // everything time-positioned renders clipped to the plot area (viewport can scroll)
     const plot = svgEl('g', { 'clip-path': 'url(#plotclip)' }, g);
@@ -660,7 +838,7 @@ function renderTimeline() {
     if (marks) {
       for (const mark of marks) {
         if (!inView(mark.t)) {
-          clockMarks.push({ t: mark.t, el: null, rowName: mark.title || row.name, catId: row.cat, sub: mark.sub });
+          clockMarks.push({ t: mark.t, el: null, rowName: mark.title || row.name, color, sub: mark.sub });
           continue;
         }
         const mx = x(mark.t);
@@ -690,7 +868,16 @@ function renderTimeline() {
           title: mark.title || row.name, color, time: mmss(mark.t), lines: mark.tip || row.tip || [], action,
         });
         makeClickable(hit);
-        clockMarks.push({ t: mark.t, el: mg, rowName: mark.title || row.name, catId: row.cat, sub: mark.sub });
+        if (row.custom && mark.node) {
+          hit.classList.add('clickable');
+          hit.addEventListener('click', (ev) => {
+            if (ev.shiftKey) return; // shift = create, handled at the svg level
+            ev.stopPropagation();
+            if (ev.altKey) deleteCustom(mark.node.id);
+            else openNodeEditor(mark.node, hit.getBoundingClientRect());
+          });
+        }
+        clockMarks.push({ t: mark.t, el: mg, rowName: mark.title || row.name, color, sub: mark.sub });
       }
     }
   }
@@ -906,7 +1093,7 @@ function updateNow() {
       div.className = 'evt';
       const dot = document.createElement('span');
       dot.className = 'dot';
-      dot.style.background = CATEGORIES[m.catId].color;
+      dot.style.background = m.color;
       const time = document.createElement('strong');
       time.textContent = mmss(m.t);
       div.append(dot, time, document.createTextNode(` ${m.rowName}${m.sub ? ` (${m.sub})` : ''}`));

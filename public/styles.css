@@ -543,6 +543,92 @@ header.site {
   letter-spacing: 0.04em;
 }
 
+/* custom-node editor footer */
+.audio-pop .ap-foot {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+}
+.audio-pop .ap-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-bottom: 8px;
+}
+.audio-pop .ap-name span {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.audio-pop .ap-name input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+.audio-pop .ap-name input:focus {
+  outline: none;
+  border-color: var(--mint);
+}
+.audio-pop .ap-time {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 9px;
+}
+.audio-pop .ap-del {
+  width: 100%;
+  cursor: pointer;
+  background: rgba(201, 80, 74, 0.12);
+  border: 1px solid rgba(201, 80, 74, 0.5);
+  border-radius: 7px;
+  padding: 6px 10px;
+  color: #e08a84;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13.5px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.audio-pop .ap-del:hover {
+  background: rgba(201, 80, 74, 0.22);
+  border-color: #c2504a;
+}
+
+/* custom lane: clickable rail + hover ghost preview */
+#timeline .custom-rail { cursor: copy; }
+#timeline .cust-ghost { pointer-events: none; }
+#timeline .cust-ghost-line {
+  stroke: var(--mint);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+  opacity: 0.5;
+}
+#timeline .cust-ghost-dia {
+  fill: #39c0b5;
+  opacity: 0.45;
+  stroke: var(--bg-1);
+  stroke-width: 2;
+}
+#timeline .cust-ghost-lbl { fill: var(--ink-2); font-size: 12px; font-family: var(--font-display); letter-spacing: 0.04em; }
+#timeline .cust-clear {
+  fill: var(--ink-3);
+  font-size: 11.5px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+#timeline .cust-clear:hover { fill: #e08a84; }
+#timeline .cust-clear:focus { outline: none; }
+#timeline .cust-clear:focus-visible { fill: #e08a84; }
+
 #timeline .now-line { stroke: var(--mint); stroke-width: 1.5; filter: drop-shadow(0 0 6px var(--mint-glow)); }
 #timeline .now-hit { cursor: ew-resize; }
 #timeline.scrubbing { cursor: ew-resize; }
